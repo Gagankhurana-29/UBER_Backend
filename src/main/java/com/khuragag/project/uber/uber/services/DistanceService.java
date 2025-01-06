@@ -1,6 +1,7 @@
 package com.khuragag.project.uber.uber.services;
 
-import java.awt.*;
+
+import org.locationtech.jts.geom.Point;
 
 public interface DistanceService {
 

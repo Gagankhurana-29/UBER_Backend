@@ -13,6 +13,7 @@ public class DriverDTO {
     private Long id;
     private UserDTO userDTO;
     private Double rating;
-    Point currentLocation;
+    private String vehicleId;
+    PointDTO currentLocation;
 
 }

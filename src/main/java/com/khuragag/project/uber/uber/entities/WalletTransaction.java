@@ -4,6 +4,7 @@ import com.khuragag.project.uber.uber.entities.enums.TransactionMethod;
 import com.khuragag.project.uber.uber.entities.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +15,11 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WalletTransactions {
+@Builder
+@Table(indexes = {
+        @Index(name = "idx_walletTransaction_wallet", columnList = "wallet_id")
+})
+public class WalletTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -24,6 +29,9 @@ public class WalletTransactions {
 
     @CreationTimestamp
     private LocalDateTime transactionTime;
+
+    @ManyToOne
+    private Ride ride;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Wallet wallet;

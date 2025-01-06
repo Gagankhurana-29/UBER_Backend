@@ -15,9 +15,15 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "idx_ride_rider", columnList = "rider_id"),
+        @Index(name = "idx_ride_driver", columnList = "driver_id"),
+        @Index(name = "idx_ride_rideStatus", columnList = "rideStatus")
+})
 public class Ride {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)

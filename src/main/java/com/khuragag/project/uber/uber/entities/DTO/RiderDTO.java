@@ -17,7 +17,7 @@ public class RiderDTO {
 
         private UserDTO user;
 
-        Point currentLocation;
+        PointDTO currentLocation;
 
 
 }
