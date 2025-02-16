@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Rider {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private Double rating;

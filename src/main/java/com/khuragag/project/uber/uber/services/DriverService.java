@@ -2,6 +2,7 @@ package com.khuragag.project.uber.uber.services;
 
 import com.khuragag.project.uber.uber.entities.DTO.DriverDTO;
 import com.khuragag.project.uber.uber.entities.DTO.RideDTO;
+import com.khuragag.project.uber.uber.entities.DTO.RiderDTO;
 import com.khuragag.project.uber.uber.entities.Driver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,7 @@ public interface DriverService {
 
     RideDTO endRide(Long rideId);
 
-    RideDTO rateRider(Long rideId, Double rating);
+    RiderDTO rateRider(Long rideId, Double rating);
 
     DriverDTO getMyProfile();
 

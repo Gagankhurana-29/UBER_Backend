@@ -10,6 +10,7 @@ import com.khuragag.project.uber.uber.entities.enums.RideStatus;
 import com.khuragag.project.uber.uber.repositories.RideRequestRepository;
 import com.khuragag.project.uber.uber.repositories.RiderRepository;
 import com.khuragag.project.uber.uber.services.DriverService;
+import com.khuragag.project.uber.uber.services.RatingService;
 import com.khuragag.project.uber.uber.services.RideService;
 import com.khuragag.project.uber.uber.services.RiderService;
 import com.khuragag.project.uber.uber.strategies.impl.DriverMatchingStrategyManager;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,7 @@ public class RiderServiceImpl implements RiderService {
     private final RiderRepository riderRepository;
     private final RideService rideService;
     private final DriverService driverService;
+    private final RatingService ratingService;
 
     @Override
     @Transactional
@@ -85,7 +88,17 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public DriverDTO rateDriver(Long rideId, Double rating) {
-        return null;
+        Ride ride = rideService.getRideById(rideId);
+        Rider rider = getCurrentRider();
+        if(!ride.getRider().equals(rider))
+        {
+            throw new RuntimeException("Rider doesn't own the ride");
+        }
+        if(!ride.getRideStatus().equals(RideStatus.COMPLETED)){
+            throw new RuntimeException("Ride can't be rated, as it isn't completed");
+        }
+
+        return ratingService.rateDriver(ride,rating);
     }
 
     @Override
@@ -98,7 +111,8 @@ public class RiderServiceImpl implements RiderService {
     @Override
     public Rider getCurrentRider() {
         //TODO : get current Rider from spring security
-        Rider rider =  riderRepository.findById(1L).orElse(null);
+       User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Rider rider =  riderRepository.findByUser(user).orElse(null);
         if(rider == null){
             throw new RuntimeException("Rider not present");
         }

@@ -1,9 +1,10 @@
 package com.khuragag.project.uber.uber.controllers;
 
-import com.khuragag.project.uber.uber.entities.DTO.DriverDTO;
-import com.khuragag.project.uber.uber.entities.DTO.SignUPDTO;
-import com.khuragag.project.uber.uber.entities.DTO.UserDTO;
+import com.khuragag.project.uber.uber.entities.DTO.*;
 import com.khuragag.project.uber.uber.services.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,14 @@ public class AuthController {
         ,HttpStatus.OK);
     }
 
-
+    @PostMapping("/login/")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO,
+                                                  HttpServletResponse httpServletResponse){
+        String[] tokens = authService.login(loginRequestDTO);
+        Cookie cookie = new Cookie("token", tokens[1]);
+        cookie.setHttpOnly(true);
+        httpServletResponse.addCookie(cookie);
+        return ResponseEntity.ok(new LoginResponseDTO(tokens[0]));
+    }
 
 }
